@@ -1,3 +1,4 @@
+/* Remi Trettin COP4530 Project 3 */
 #ifndef COP4530_STACK_H
 #define COP4530_STACK_H
 
