@@ -102,6 +102,7 @@ void BET::printInfixExpression() {
 
 void BET::printPostfixExpression() {
   printPostfixExpression(root);
+  cout << endl;
 }
 
 bool BET::empty() {
@@ -128,15 +129,27 @@ void BET::printInfixExpression(BinaryNode *t) {
 }
 
 void BET::printPostfixExpression(BinaryNode *t) {
-  //
+  if(t) {
+    printPostfixExpression(t->left);
+    printPostfixExpression(t->right);
+    cout << t->element << " ";
+  }
 }
 
 size_t BET::size(BinaryNode *t) {
-  //
+  size_t total = 1;
+  if(t->left != NULL) total = total + size(t->left);
+  if(t->right != NULL) total = total + size(t->right);
+  return total;
 }
 
 size_t BET::leaf_nodes(BinaryNode *t) {
-  //
+  if(t == NULL)
+    return 0;
+  if(t->left == NULL && t->right == NULL)
+    return 1;
+  else
+    return leaf_nodes(t->left) + leaf_nodes(t->right);
 }
 
 void BET::makeEmpty(BinaryNode * &t) {
