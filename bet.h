@@ -2,7 +2,9 @@
 #define BET_H
 
 #include <string>
+#include <vector>
 using std::string;
+using std::vector;
 
 class BET{
   public:
@@ -31,6 +33,7 @@ class BET{
     BinaryNode * clone(BinaryNode *t) const;
     size_t size(BinaryNode *t);
     size_t leaf_nodes(BinaryNode *t);
+    vector<string> explode(string const &s, char delimiter);
 };
 
 #endif

@@ -26,18 +26,16 @@ bool isOperator(string s) {
 BET::BET() : root(nullptr) {
 }
 
-BET::BET(string postfix) : root(nullptr) { // DOESNT ACCOUNT FOR NUMBERS WITH MORE THAN 1 DIGIT
+BET::BET(string postfix) : root(nullptr) {
   stack<BinaryNode *> stk;
   BinaryNode *n1, *n2;
-  string temp;
-  for(int i = 0; i < postfix.length(); i++) {
-    temp = postfix[i];
-    if(temp == " ") continue;
-    if(!isOperator(temp)) {
-      root = new BinaryNode(temp);
+  auto temp = explode(postfix, ' ');
+  for(auto itr = temp.begin(); itr != temp.end(); ++itr) {
+    if(!isOperator(*itr)) {
+      root = new BinaryNode(*itr);
       stk.push(root);
     }else{
-      root = new BinaryNode(temp);
+      root = new BinaryNode(*itr);
       n1 = stk.top();
       stk.pop();
       n2 = stk.top();
@@ -61,22 +59,20 @@ BET::~BET() {
   root = NULL;
 }
 
-bool BET::buildFromPostfix(const string postfix) { // DOESNT ACCOUNT FOR NUMBERS WITH MORE THAN 1 DIGIT
+bool BET::buildFromPostfix(const string postfix) {
   if(!empty()) {
     makeEmpty(root);
     root = NULL;
   }
   stack<BinaryNode *> stk;
   BinaryNode *n1, *n2;
-  string temp;
-  for(int i = 0; i < postfix.length(); i++) {
-    temp = postfix[i];
-    if(temp == " ") continue;
-    if(!isOperator(temp)) {
-      root = new BinaryNode(temp);
+  auto temp = explode(postfix, ' ');
+  for(auto itr = temp.begin(); itr != temp.end(); ++itr) {
+    if(!isOperator(*itr)) {
+      root = new BinaryNode(*itr);
       stk.push(root);
     }else{
-      root = new BinaryNode(temp);
+      root = new BinaryNode(*itr);
       n1 = stk.top();
       stk.pop();
       n2 = stk.top();
@@ -184,4 +180,15 @@ BET::BinaryNode * BET::clone(BinaryNode *t) const {
   temp->left = clone(t->left);
   temp->right = clone(t->right);
   return temp;
+}
+
+vector<string> BET::explode(string const &s, char delimiter) {
+  vector<string> result;
+  istringstream iss(s);
+
+  for(string token; getline(iss, token, delimiter);) {
+    result.push_back(move(token));
+  }
+
+  return result;
 }
