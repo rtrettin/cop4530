@@ -26,7 +26,7 @@ bool isOperator(string s) {
 BET::BET() : root(nullptr) {
 }
 
-BET::BET(string postfix) : root(nullptr) {
+BET::BET(string postfix) : root(nullptr) { // DOESNT ACCOUNT FOR NUMBERS WITH MORE THAN 1 DIGIT
   stack<BinaryNode *> stk;
   BinaryNode *n1, *n2;
   string temp;
@@ -52,16 +52,19 @@ BET::BET(string postfix) : root(nullptr) {
 }
 
 BET::BET(const BET& bet) : root(nullptr) {
-  //
+  BinaryNode * copy = clone(bet.root);
+  root = copy;
 }
 
 BET::~BET() {
-  //
+  makeEmpty(root);
+  root = NULL;
 }
 
-bool BET::buildFromPostfix(const string postfix) {
+bool BET::buildFromPostfix(const string postfix) { // DOESNT ACCOUNT FOR NUMBERS WITH MORE THAN 1 DIGIT
   if(!empty()) {
-    //makeEmpty(this);
+    makeEmpty(root);
+    root = NULL;
   }
   stack<BinaryNode *> stk;
   BinaryNode *n1, *n2;
@@ -92,7 +95,13 @@ bool BET::buildFromPostfix(const string postfix) {
 }
 
 const BET & BET::operator=(const BET &rhs) {
-  //
+  if(!empty()) {
+    makeEmpty(root);
+    root = NULL;
+  }
+  BinaryNode * copy = clone(rhs.root);
+  root = copy;
+  return *this;
 }
 
 void BET::printInfixExpression() {
@@ -113,11 +122,17 @@ bool BET::empty() {
 }
 
 size_t BET::size() {
-  return size(root);
+  if(root == NULL)
+    return 0;
+  else
+    return size(root);
 }
 
 size_t BET::leaf_nodes() {
-  return leaf_nodes(root);
+  if(root == NULL)
+    return 0;
+  else
+    return leaf_nodes(root);
 }
 
 void BET::printInfixExpression(BinaryNode *t) {
@@ -153,9 +168,20 @@ size_t BET::leaf_nodes(BinaryNode *t) {
 }
 
 void BET::makeEmpty(BinaryNode * &t) {
-  //
+  if(t == NULL)
+    return;
+  makeEmpty(t->left);
+  makeEmpty(t->right);
+  delete t;
+  t = NULL;
 }
 
 BET::BinaryNode * BET::clone(BinaryNode *t) const {
-  //
+  if(t == NULL) {
+    return t;
+  }
+  BinaryNode * temp = new BinaryNode(t->element);
+  temp->left = clone(t->left);
+  temp->right = clone(t->right);
+  return temp;
 }
