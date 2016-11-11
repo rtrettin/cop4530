@@ -36,6 +36,11 @@ BET::BET(string postfix) : root(nullptr) {
       stk.push(root);
     }else{
       root = new BinaryNode(*itr);
+      if(stk.empty()) {
+        makeEmpty(root);
+        root = NULL;
+        return;
+      }
       n1 = stk.top();
       stk.pop();
       n2 = stk.top();
@@ -45,8 +50,18 @@ BET::BET(string postfix) : root(nullptr) {
       stk.push(root);
     }
   }
+  if(stk.empty()) {
+    makeEmpty(root);
+    root = NULL;
+    return;
+  }
   root = stk.top();
   stk.pop();
+  if(!stk.empty()) {
+    makeEmpty(root);
+    root = NULL;
+    return;
+  }
 }
 
 BET::BET(const BET& bet) : root(nullptr) {
@@ -73,6 +88,11 @@ bool BET::buildFromPostfix(const string postfix) {
       stk.push(root);
     }else{
       root = new BinaryNode(*itr);
+      if(stk.empty()) {
+        makeEmpty(root);
+        root = NULL;
+        return false;
+      }
       n1 = stk.top();
       stk.pop();
       n2 = stk.top();
@@ -82,12 +102,19 @@ bool BET::buildFromPostfix(const string postfix) {
       stk.push(root);
     }
   }
+  if(stk.empty()) {
+    makeEmpty(root);
+    root = NULL;
+    return false;
+  }
   root = stk.top();
   stk.pop();
-  if(!empty()) {
-    return true;
+  if(!stk.empty()) {
+    makeEmpty(root);
+    root = NULL;
+    return false;
   }
-  return false;
+  return true;
 }
 
 const BET & BET::operator=(const BET &rhs) {
