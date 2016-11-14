@@ -1,3 +1,4 @@
+/* Remi Trettin COP4530 Project 4 */
 #ifndef BET_H
 #define BET_H
 

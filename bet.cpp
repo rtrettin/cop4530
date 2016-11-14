@@ -1,3 +1,4 @@
+/* Remi Trettin COP4530 Project 4 */
 #include <iostream>
 #include <vector>
 #include <stack>
@@ -9,6 +10,7 @@ using namespace std;
 const int PrecPD = 2;
 const int PrecAM = 1;
 
+// determine operator precedence
 int precedence(string s) {
   if(s == "+" || s == "-") {
     return PrecAM;
@@ -16,6 +18,7 @@ int precedence(string s) {
   return PrecPD;
 }
 
+// return true if s is an operator
 bool isOperator(string s) {
   if(s == "+" || s == "-" || s == "*" || s == "/") {
     return true;
@@ -23,9 +26,11 @@ bool isOperator(string s) {
   return false;
 }
 
+// default constructor - set root to null
 BET::BET() : root(nullptr) {
 }
 
+// build a BET from a postfix expression
 BET::BET(string postfix) : root(nullptr) {
   stack<BinaryNode *> stk;
   BinaryNode *n1, *n2;
@@ -64,16 +69,19 @@ BET::BET(string postfix) : root(nullptr) {
   }
 }
 
+// build a BET from another BET using the private clone() function
 BET::BET(const BET& bet) : root(nullptr) {
   BinaryNode * copy = clone(bet.root);
   root = copy;
 }
 
+// destructor - delete necessary memory
 BET::~BET() {
   makeEmpty(root);
   root = NULL;
 }
 
+// rebuild BET from a postfix expression
 bool BET::buildFromPostfix(const string postfix) {
   if(!empty()) {
     makeEmpty(root);
@@ -117,6 +125,7 @@ bool BET::buildFromPostfix(const string postfix) {
   return true;
 }
 
+// assignment operator
 const BET & BET::operator=(const BET &rhs) {
   if(!empty()) {
     makeEmpty(root);
@@ -127,16 +136,19 @@ const BET & BET::operator=(const BET &rhs) {
   return *this;
 }
 
+// public interface
 void BET::printInfixExpression() {
   printInfixExpression(root);
   cout << endl;
 }
 
+// public interface
 void BET::printPostfixExpression() {
   printPostfixExpression(root);
   cout << endl;
 }
 
+// return true if the BET is empty
 bool BET::empty() {
   if(root == nullptr) {
     return true;
@@ -144,6 +156,7 @@ bool BET::empty() {
   return false;
 }
 
+// public interface
 size_t BET::size() {
   if(root == NULL)
     return 0;
@@ -151,6 +164,7 @@ size_t BET::size() {
     return size(root);
 }
 
+// public interface
 size_t BET::leaf_nodes() {
   if(root == NULL)
     return 0;
@@ -158,6 +172,7 @@ size_t BET::leaf_nodes() {
     return leaf_nodes(root);
 }
 
+// private function to traverse the tree inorder using recursion
 void BET::printInfixExpression(BinaryNode *t) {
   if(t) {
     printInfixExpression(t->left);
@@ -166,6 +181,7 @@ void BET::printInfixExpression(BinaryNode *t) {
   }
 }
 
+// private function to print the postfix expression using recursion
 void BET::printPostfixExpression(BinaryNode *t) {
   if(t) {
     printPostfixExpression(t->left);
@@ -174,6 +190,7 @@ void BET::printPostfixExpression(BinaryNode *t) {
   }
 }
 
+// return the size of the tree using recursion
 size_t BET::size(BinaryNode *t) {
   size_t total = 1;
   if(t->left != NULL) total = total + size(t->left);
@@ -181,6 +198,7 @@ size_t BET::size(BinaryNode *t) {
   return total;
 }
 
+// return the number of leaf nodes using recursion
 size_t BET::leaf_nodes(BinaryNode *t) {
   if(t == NULL)
     return 0;
@@ -190,6 +208,7 @@ size_t BET::leaf_nodes(BinaryNode *t) {
     return leaf_nodes(t->left) + leaf_nodes(t->right);
 }
 
+// empty the tree using recursion
 void BET::makeEmpty(BinaryNode * &t) {
   if(t == NULL)
     return;
@@ -199,6 +218,7 @@ void BET::makeEmpty(BinaryNode * &t) {
   t = NULL;
 }
 
+// clone the tree denoted by t using recursion
 BET::BinaryNode * BET::clone(BinaryNode *t) const {
   if(t == NULL) {
     return t;
@@ -209,6 +229,7 @@ BET::BinaryNode * BET::clone(BinaryNode *t) const {
   return temp;
 }
 
+// return a vector of strings without the delimiter character
 vector<string> BET::explode(string const &s, char delimiter) {
   vector<string> result;
   istringstream iss(s);
